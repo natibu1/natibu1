@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weihnachtsgeschenk-O-Mator</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fff8f0;
+            color: #1d1d1f;
+            text-align: center;
+        }
+        header {
+            background-color: #d4a373;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        header h1 {
+            font-size: 2.5rem;
+            margin: 0;
+            color: #ffffff;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #ffefe0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+        }
+        h1 {
+            font-size: 2rem;
+            color: #1d1d1f;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 1rem;
+            margin-bottom: 30px;
+            color: #515154;
+        }
+        button {
+            font-size: 1rem;
+            padding: 15px 25px;
+            margin: 10px;
+            background-color: #d4a373;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-weight: 600;
+        }
+        button:hover {
+            background-color: #b3845b;
+        }
+        .hidden {
+            display: none;
+        }
+        .fade-out {
+            animation: fadeOut 0.5s forwards;
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="step1">
+        <h1>Wähle das Material</h1>
+        <button onclick="selectMaterial('Normal/Baumwolle')">Normal/Baumwolle</button>
+        <button onclick="selectMaterial('Satin')">Satin</button>
+        <button onclick="selectMaterial('Rauer/Leinen')">Rauer/Leinen</button>
+    </div>
+
+    <div class="container hidden" id="step2">
+        <h1>Wähle den Stil</h1>
+        <button onclick="selectStyle('Einfarbig')">Einfarbig</button>
+        <button onclick="selectStyle('Muster')">Muster</button>
+        <button onclick="selectStyle('Sehr dezente Streifen')">Sehr dezente Streifen</button>
+    </div>
+
+    <div class="container hidden" id="step3">
+        <h1>Wähle die Farbe</h1>
+        <div id="color-options"></div>
+    </div>
+
+    <script>
+        const products = [
+            { material: "Normal/Baumwolle", stil: "Einfarbig", colors: [
+                { name: "Beige", price: 19.99, link: "https://www.ikea.com/de/de/p/aengslilja-bettwaesche-set-2-teilig-natur-50591986/" },
+                { name: "Hellblau", price: 19.99, link: "https://www.ikea.com/de/de/p/aengslilja-bettwaesche-set-2-teilig-blaugrau-60585225/#content" },
+                { name: "Orange/Rot", price: 19.99, link: "https://www.ikea.com/de/de/p/aengslilja-bettwaesche-set-2-teilig-rotbraun-00585148/#content" },
+                { name: "Dunkelgrau", price: 19.99, link: "https://www.ikea.com/de/de/p/aengslilja-bettwaesche-set-2-teilig-grau-10318673/#content" },
+                { name: "Olive", price: 19.99, link: "https://www.ikea.com/de/de/p/aengslilja-bettwaesche-set-2-teilig-graugruen-10585181/#content" },
+                { name: "Weiß", price: 19.99, link: "https://www.ikea.com/de/de/p/aengslilja-bettwaesche-set-2-teilig-weiss-10318569/#content" }
+            ] },
+            { material: "Normal/Baumwolle", stil: "Muster", colors: [
+                { name: "Graugrün-weiß Karo", price: 29.9, link: "https://www.ikea.com/de/de/p/ektandvinge-bettwaesche-set-2-teilig-blasses-graugruen-weiss-karo-00585431/" },
+                { name: "Anthrazit-weiß Karo", price: 29.9, link: "https://www.ikea.com/de/de/p/ektandvinge-bettwaesche-set-2-teilig-anthrazit-weiss-karo-90585403/#content" }
+            ] },
+            { material: "Satin", stil: "Einfarbig", colors: [
+                { name: "Graubeige", price: 60, link: "https://www.ikea.com/de/de/p/luktjasmin-bettwaesche-set-2-teilig-graubeige-20570301/" },
+                { name: "Gelb", price: 60, link: "https://www.ikea.com/de/de/p/luktjasmin-bettwaesche-set-2-teilig-gelb-20541139/#content" },
+                { name: "Dunkelgrau", price: 60, link: "https://www.ikea.com/de/de/p/luktjasmin-bettwaesche-set-2-teilig-dunkelgrau-50442557/#content" }
+            ] },
+            { material: "Satin", stil: "Muster", colors: [
+                { name: "Dunkelgrün", price: 34.99, link: "https://www.ikea.com/de/de/p/naesselklocka-bettwaesche-set-2-teilig-dunkel-graugruen-bunt-60585555/#content" },
+                { name: "Hellgraugrün Floral", price: 34.99, link: "https://www.ikea.com/de/de/p/naesselklocka-bettwaesche-set-2-teilig-hell-graugruen-bunt-70518527/#content" },
+                { name: "Beige Floral", price: 34.99, link: "https://www.ikea.com/de/de/p/naesselklocka-bettwaesche-set-2-teilig-helles-graubeige-bunt-00584549/#content" }
+            ] },
+            { material: "Satin", stil: "Sehr dezente Streifen", colors: [
+                { name: "Weiß", price: 60, link: "https://www.ikea.com/de/de/p/nattjasmin-bettwaesche-set-2-teilig-weiss-60337184/" },
+                { name: "Hellbeige", price: 60, link: "https://www.ikea.com/de/de/p/nattjasmin-bettwaesche-set-2-teilig-hellbeige-50442623/#content" },
+                { name: "Petrol", price: 60, link: "https://www.ikea.com/de/de/p/nattjasmin-bettwaesche-set-2-teilig-blaugruen-70595832/#content" }
+            ] },
+            { material: "Rauer/Leinen", stil: "Einfarbig", colors: [
+                { name: "Weiß", price: 79, link: "https://www.ikea.com/de/de/p/dytag-bettwaesche-set-2-teilig-weiss-30518770/" },
+                { name: "Dunkelgrau", price: 79, link: "https://www.ikea.com/de/de/p/dytag-bettwaesche-set-2-teilig-dunkelgrau-60518820/#content" }
+            ] },
+            { material: "Satin", stil: "Einfarbig", colors: [
+                { name: "Braunrot", price: 70, link: "https://www.ikea.com/de/de/p/kritsuga-bettwaesche-set-2-teilig-braunrot-90527012/" },
+                { name: "Hellbraunrot", price: 70, link: "https://www.ikea.com/de/de/p/kritsuga-bettwaesche-set-2-teilig-hell-braunrot-90527007/#content" },
+                { name: "Weiß", price: 70, link: "https://www.ikea.com/de/de/p/kritsuga-bettwaesche-set-2-teilig-weiss-50527014/#content" }
+            ] }
+        ];
+
+        let selectedMaterial = "";
+        let selectedStyle = "";
+
+        function selectMaterial(material) {
+            selectedMaterial = material;
+            document.getElementById('step1').classList.add('hidden');
+            document.getElementById('step2').classList.remove('hidden');
+        }
+
+        function selectStyle(style) {
+            selectedStyle = style;
+            document.getElementById('step2').classList.add('hidden');
+            document.getElementById('step3').classList.remove('hidden');
+            displayColors();
+        }
+
+        function displayColors() {
+            const product = products.find(p => p.material === selectedMaterial && p.stil === selectedStyle);
+            const colorOptions = document.getElementById('color-options');
+            colorOptions.innerHTML = "";
+
+            if (product && product.colors.length > 0) {
+                product.colors.forEach(color => {
+                    const button = document.createElement('button');
+                    button.textContent = color.name;
+                    button.onclick = () => window.open(color.link, '_blank');
+                    colorOptions.appendChild(button);
+                });
+            } else {
+                colorOptions.innerHTML = "<p>Keine Optionen verfügbar</p>";
+            }
+        }
+
+        function restart() {
+            selectedMaterial = "";
+            selectedStyle = "";
+            document.getElementById('step3').classList.add('hidden');
+            document.getElementById('step2').classList.add('hidden');
+            document.getElementById('step1').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
